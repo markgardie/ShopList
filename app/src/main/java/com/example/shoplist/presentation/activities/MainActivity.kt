@@ -1,10 +1,11 @@
-package com.example.shoplist.presentation.viewmodels
+package com.example.shoplist.presentation.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoplist.R
+import com.example.shoplist.presentation.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
