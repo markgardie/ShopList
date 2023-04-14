@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        viewModel.getShopList()
-
         viewModel.shopList.observe(this) {
             Log.d("MainActivityTest", it.toString())
         }
