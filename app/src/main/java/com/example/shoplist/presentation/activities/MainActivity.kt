@@ -46,10 +46,8 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        adapter.onShopItemClickListener = object : ShopListAdapter.OnShopItemLongClickListener {
-            override fun onShopItemLongClick(shopItem: ShopItem) {
-                viewModel.changeEnableState(shopItem)
-            }
+        adapter.onShopItemClickListener = {
+            viewModel.changeEnableState(it)
         }
     }
 }
