@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.presentation.adapters.ShopListAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
 
@@ -43,6 +44,12 @@ class MainActivity : AppCompatActivity() {
                 ShopListAdapter.VIEW_TYPE_DISABLED,
                 ShopListAdapter.MAX_POOL_SIZE
             )
+        }
+
+        adapter.onShopItemClickListener = object : ShopListAdapter.OnShopItemLongClickListener {
+            override fun onShopItemLongClick(shopItem: ShopItem) {
+                viewModel.changeEnableState(shopItem)
+            }
         }
     }
 }
