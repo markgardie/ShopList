@@ -46,14 +46,15 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        adapter.onShopItemLongClickListener = {
-            viewModel.changeEnableState(it)
-        }
 
-        adapter.onShopItemClickListener = {
-            Log.d("onShopItemClickListener", "$it clicked")
-        }
+        setupLongClickListener()
 
+        setupClickListener()
+
+        setupSwipeListener(rvShopList)
+    }
+
+    private fun setupSwipeListener(rvShopList: RecyclerView?) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -78,4 +79,17 @@ class MainActivity : AppCompatActivity() {
 
         itemTouchHelper.attachToRecyclerView(rvShopList)
     }
+
+    private fun setupClickListener() {
+        adapter.onShopItemClickListener = {
+            Log.d("onShopItemClickListener", "$it clicked")
+        }
+    }
+
+    private fun setupLongClickListener() {
+        adapter.onShopItemLongClickListener = {
+            viewModel.changeEnableState(it)
+        }
+    }
+
 }
