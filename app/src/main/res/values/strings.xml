@@ -4,4 +4,6 @@
     <string name="name_string">Name</string>
     <string name="count_string">Count</string>
     <string name="save_string">Save</string>
+    <string name="error_input_name">Invalid name</string>
+    <string name="error_input_count">Invalid count</string>
 </resources>
