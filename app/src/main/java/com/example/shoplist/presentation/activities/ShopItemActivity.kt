@@ -25,7 +25,9 @@ class ShopItemActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shop_item)
 
         parseIntent()
-        launchRightMode()
+        if (savedInstanceState == null) {
+            launchRightMode()
+        }
 
     }
 
@@ -37,7 +39,7 @@ class ShopItemActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()
     }
 
@@ -68,10 +70,10 @@ class ShopItemActivity : AppCompatActivity() {
 
         private const val EXTRA_SCREEN_MODE = "extra_screen"
         private const val EXTRA_SHOP_ITEM_ID = "extra_shop_item_id"
-        private const val MODE_ADD = "mode_add"
-        private const val MODE_EDIT = "mode_edit"
+        const val MODE_ADD = "mode_add"
+        const val MODE_EDIT = "mode_edit"
 
-        private const val MODE_UNKNOWN = ""
+        const val MODE_UNKNOWN = ""
 
         fun newIntentAddItem(context: Context): Intent {
             val intent = Intent(context, ShopItemActivity::class.java)
