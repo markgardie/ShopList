@@ -1,6 +1,7 @@
 package com.example.shoplist.presentation.activities
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.databinding.ActivityMainBinding
 import com.example.shoplist.presentation.adapters.ShopListAdapter
 import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.viewmodels.MainViewModel
@@ -18,25 +20,24 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: ShopListAdapter
-    private var shopItemContainer: FragmentContainerView? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
-
-        shopItemContainer = findViewById(R.id.shop_item_container)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupRecyclerView()
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        viewModel.shopList.observe(this) {
-            adapter.submitList(it)
-        }
+        observeViewModel()
+        addItemClickListener()
 
-        buttonAddItem.setOnClickListener {
+    }
+
+    private fun addItemClickListener() {
+        binding.buttonAddShopItem.setOnClickListener {
             if (isOnePaneMode()) {
                 val intent = ShopItemActivity.newIntentAddItem(this)
                 startActivity(intent)
@@ -44,9 +45,13 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
                 val fragment = ShopItemFragment.newInstanceAddItem()
                 launchFragment(fragment)
             }
-
         }
+    }
 
+    private fun observeViewModel() {
+        viewModel.shopList.observe(this) {
+            adapter.submitList(it)
+        }
     }
 
     override fun onEditingFinished() {
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     }
 
     private fun isOnePaneMode(): Boolean {
-        return shopItemContainer == null
+        return binding.shopItemContainer == null
     }
 
     private fun launchFragment(fragment: Fragment) {
@@ -66,11 +71,11 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             .commit()
     }
     private fun setupRecyclerView() {
-        val rvShopList = findViewById<RecyclerView>(R.id.rv_shop_list)
-        adapter = ShopListAdapter()
-        rvShopList.adapter = adapter
 
-        with(rvShopList) {
+        adapter = ShopListAdapter()
+        binding.rvShopList.adapter = adapter
+
+        with(binding.rvShopList) {
 
             recycledViewPool.setMaxRecycledViews(
                 ShopListAdapter.VIEW_TYPE_ENABLED,
@@ -83,15 +88,12 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             )
         }
 
-
         setupLongClickListener()
-
         setupClickListener()
-
-        setupSwipeListener(rvShopList)
+        setupSwipeListener()
     }
 
-    private fun setupSwipeListener(rvShopList: RecyclerView?) {
+    private fun setupSwipeListener() {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -114,7 +116,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
         val itemTouchHelper = ItemTouchHelper(callback)
 
-        itemTouchHelper.attachToRecyclerView(rvShopList)
+        itemTouchHelper.attachToRecyclerView(binding.rvShopList)
     }
 
     private fun setupClickListener() {
