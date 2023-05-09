@@ -16,7 +16,7 @@ abstract class AppDatabase: RoomDatabase() {
         private val LOCK = Any()
         private val DB_NAME = "shop_item.db"
 
-        fun newInstance(application: Application): AppDatabase {
+        fun getInstance(application: Application): AppDatabase {
             INSTANCE?.let {
                 return it
             }
