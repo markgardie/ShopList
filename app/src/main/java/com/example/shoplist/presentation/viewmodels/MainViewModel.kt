@@ -9,23 +9,40 @@ import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.domain.use_cases.DeleteShopitemUseCase
 import com.example.shoplist.domain.use_cases.EditShopItemUseCase
 import com.example.shoplist.domain.use_cases.GetShopListUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository = ShopListRepositoryImpl(application)
+    private val repository = ShopListRepositoryImpl(application)
 
-    val getShopListUseCase = GetShopListUseCase(repository)
-    val editShopItemUseCase = EditShopItemUseCase(repository)
-    val deleteShopItemUseCase = DeleteShopitemUseCase(repository)
+    private val getShopListUseCase = GetShopListUseCase(repository)
+    private val editShopItemUseCase = EditShopItemUseCase(repository)
+    private val deleteShopItemUseCase = DeleteShopitemUseCase(repository)
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     var shopList = getShopListUseCase.getShopList()
 
     fun deleteShopItem(shopItem: ShopItem) {
-        deleteShopItemUseCase.deleteShopItem(shopItem)
+        scope.launch {
+            deleteShopItemUseCase.deleteShopItem(shopItem)
+        }
+
     }
 
     fun changeEnableState(shopItem: ShopItem) {
-        val newItem = shopItem.copy(enabled = !shopItem.enabled)
-        editShopItemUseCase.editShopItem(newItem)
+
+        scope.launch {
+            val newItem = shopItem.copy(enabled = !shopItem.enabled)
+            editShopItemUseCase.editShopItem(newItem)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        scope.cancel()
     }
 }
