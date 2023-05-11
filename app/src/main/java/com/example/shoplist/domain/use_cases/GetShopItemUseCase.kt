@@ -4,10 +4,10 @@ import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.domain.repositories.ShopListRepository
 
 class GetShopItemUseCase(
-    val shopListRepository: ShopListRepository
+    private val shopListRepository: ShopListRepository
 ) {
 
-    fun getShopItem(shopItemId: Int): ShopItem {
+    suspend fun getShopItem(shopItemId: Int): ShopItem {
         return  shopListRepository.getShopItem(shopItemId)
     }
 }

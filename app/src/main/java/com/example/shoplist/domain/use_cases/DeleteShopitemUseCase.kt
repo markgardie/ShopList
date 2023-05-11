@@ -4,9 +4,9 @@ import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.domain.repositories.ShopListRepository
 
 class DeleteShopitemUseCase(
-    val shopListRepository: ShopListRepository) {
+    private val shopListRepository: ShopListRepository) {
 
-    fun deleteShopItem (shopItem: ShopItem) {
+    suspend fun deleteShopItem (shopItem: ShopItem) {
         shopListRepository.deleteShopItem(shopItem)
     }
 }

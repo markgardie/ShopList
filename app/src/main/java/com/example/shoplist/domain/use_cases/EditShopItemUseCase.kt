@@ -4,9 +4,9 @@ import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.domain.repositories.ShopListRepository
 
 class EditShopItemUseCase(
-    val shopListRepository: ShopListRepository) {
+    private val shopListRepository: ShopListRepository) {
 
-    fun editShopItem(shopItem: ShopItem) {
+    suspend fun editShopItem(shopItem: ShopItem) {
         shopListRepository.editShopItem(shopItem)
     }
 }
