@@ -11,10 +11,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
 import com.example.shoplist.databinding.ActivityMainBinding
+import com.example.shoplist.di.ShopApplication
 import com.example.shoplist.presentation.adapters.ShopListAdapter
 import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.viewmodels.MainViewModel
+import com.example.shoplist.presentation.viewmodels.ViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
@@ -22,14 +25,24 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     private lateinit var adapter: ShopListAdapter
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (application as ShopApplication).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupRecyclerView()
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         observeViewModel()
         addItemClickListener()

@@ -1,28 +1,22 @@
 package com.example.shoplist.presentation.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.shoplist.data.repositories.ShopListRepositoryImpl
 import com.example.shoplist.domain.models.ShopItem
-import com.example.shoplist.domain.use_cases.DeleteShopitemUseCase
+import com.example.shoplist.domain.use_cases.DeleteShopItemUseCase
 import com.example.shoplist.domain.use_cases.EditShopItemUseCase
 import com.example.shoplist.domain.use_cases.GetShopListUseCase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel @Inject constructor(
+    private val getShopListUseCase: GetShopListUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase,
+    private val deleteShopItemUseCase: DeleteShopItemUseCase,
+    private val scope: CoroutineScope
+) : ViewModel() {
 
-    private val repository = ShopListRepositoryImpl(application)
-
-    private val getShopListUseCase = GetShopListUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
-    private val deleteShopItemUseCase = DeleteShopitemUseCase(repository)
-
-    private val scope = CoroutineScope(Dispatchers.Main)
 
     var shopList = getShopListUseCase.getShopList()
 
