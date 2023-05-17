@@ -6,16 +6,20 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.shoplist.data.database.AppDatabase
+import com.example.shoplist.data.database.ShopListDao
 import com.example.shoplist.data.mappers.ShopListMapper
+import com.example.shoplist.di.ApplicationScope
 import com.example.shoplist.domain.models.ShopItem
 import com.example.shoplist.domain.repositories.ShopListRepository
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(
-    application: Application
+@ApplicationScope
+class ShopListRepositoryImpl @Inject constructor(
+    private val shopListDao: ShopListDao,
+    private val mapper: ShopListMapper
 ) : ShopListRepository {
 
-    private val shopListDao = AppDatabase.getInstance(application).shopListDao()
-    private val mapper = ShopListMapper()
+
     override fun getShopList(): LiveData<List<ShopItem>> =
         Transformations.map(shopListDao.getShopList()) {
             mapper.mapListDbModelToListEntity(it)

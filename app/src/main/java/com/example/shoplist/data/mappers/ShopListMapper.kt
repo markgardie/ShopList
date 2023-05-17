@@ -3,8 +3,9 @@ package com.example.shoplist.data.mappers
 import androidx.lifecycle.LiveData
 import com.example.shoplist.data.database.ShopItemDbModel
 import com.example.shoplist.domain.models.ShopItem
+import javax.inject.Inject
 
-class ShopListMapper {
+class ShopListMapper @Inject constructor() {
 
     fun mapDbModelToEntity(dbModel: ShopItemDbModel) = ShopItem(
             id = dbModel.id,
